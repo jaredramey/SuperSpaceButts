@@ -1,47 +1,42 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+# From http://kleber-swf.com/the-definitive-gitignore-for-unity-projects/
 
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Obj/
+UnityGenerated/
+Library/
+ 
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+ 
+# ============ #
+# OS generated #
+# ============ #
 .DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
+.DS_Store?
 ._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
 .Spotlight-V100
-.TemporaryItems
 .Trashes
-.VolumeIcon.icns
+Icon?
+ehthumbs.db
+Thumbs.db
 
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+# plus some of @terrehbyte's stuff
+
+# UnityVS
+*/UnityVS/
+UnityVS.meta
+*.sln.DotSettings
