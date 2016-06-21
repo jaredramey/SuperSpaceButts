@@ -11,6 +11,9 @@ public class Player_Controller : MonoBehaviour
     [SerializeField]
     [HideInInspector]
     private float horizontal = 0.0f;
+    [SerializeField]
+    //[HideInInspector]
+    private Vector2 Movement = new Vector2(0.0f, 0.0f);
     private Rigidbody2D playerBody;
 
     // Use this for initialization
@@ -27,31 +30,25 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    void FixedUpdate()
-    {
         //Trying to decide if I should leave this here or move it to InputManager.
         //We shall see what happens
         horizontal = Input.GetAxis("Horizontal");
+        playerBody.AddForce(Movement);
+        Movement = new Vector2(0.0f, 0.0f);
     }
 
     #region Listener-Handles
     private void Handle_OnMoveForward()
     {
-        Vector2 Movement = new Vector2(horizontal * moveForce, 0.0f);
-        playerBody.AddForce(Movement);
+        Movement = new Vector2(horizontal * moveForce, 0.0f);
     }
     private void Handle_OnMoveBackward()
     {
-        Vector2 Movement = new Vector2((horizontal * moveForce), 0.0f);
-        playerBody.AddForce(Movement);
+        Movement = new Vector2((horizontal * moveForce), 0.0f);
     }
     private void Handle_OnJump()
     {
-        Vector2 Movement = new Vector2(0.0f, jumpForce);
-        playerBody.AddForce(Movement);
+        Movement = new Vector2(0.0f, jumpForce);
     }
     private void Handle_OnUse()
     {
