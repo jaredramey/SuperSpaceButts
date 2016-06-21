@@ -9,6 +9,7 @@ public class Player_Controller : MonoBehaviour
     [SerializeField]
     public float jumpForce = 0.0f;
     [SerializeField]
+    [HideInInspector]
     private float horizontal = 0.0f;
     private Rigidbody2D playerBody;
 
@@ -31,9 +32,9 @@ public class Player_Controller : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Trying to decide if I should leave this here or move it to InputManager.
+        //We shall see what happens
         horizontal = Input.GetAxis("Horizontal");
-        Debug.Log(Input.GetAxis("Horizontal"));
-        Debug.Log(horizontal);
     }
 
     #region Listener-Handles
@@ -44,7 +45,7 @@ public class Player_Controller : MonoBehaviour
     }
     private void Handle_OnMoveBackward()
     {
-        Vector2 Movement = new Vector2(-horizontal * moveForce, 0.0f);
+        Vector2 Movement = new Vector2((horizontal * moveForce), 0.0f);
         playerBody.AddForce(Movement);
     }
     private void Handle_OnJump()

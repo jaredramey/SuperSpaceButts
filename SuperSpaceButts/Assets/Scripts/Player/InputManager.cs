@@ -60,18 +60,21 @@ public class InputManager : MonoBehaviour
     {
         #region Player-Movement
         //Jump Up
-        if(Input.GetKeyDown(KeyCode.Space))
+        //Using GetKey instead of GetKeyDown so the event will keep getting called
+        if (Input.GetKey(KeyCode.Space))
         {
             OnJump.Invoke();
             canJump = !canJump;
         }
         //Move Forward
-        if(Input.GetKeyDown(KeyCode.D))
+        //Using GetKey instead of GetKeyDown so the event will keep getting called
+        if(Input.GetKey(KeyCode.D))
         {
             OnMoveForward.Invoke();
         }
         //Move Backward
-        if(Input.GetKeyDown(KeyCode.A))
+        //Using GetKey instead of GetKeyDown so the event will keep getting called
+        if (Input.GetKey(KeyCode.A))
         {
             OnMoveBackward.Invoke();
         }
