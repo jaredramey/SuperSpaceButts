@@ -6,6 +6,10 @@ public class InputManager : MonoBehaviour
 {
     private static InputManager instance = null;
 
+    [SerializeField]
+    [HideInInspector]
+    public float horizontal = 0.0f;
+
     #region Event-Init-Area
     [HideInInspector]
     public UnityEvent OnMoveForward = new UnityEvent();
@@ -58,6 +62,8 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        horizontal = Input.GetAxis("Horizontal");
+
         #region Player-Movement
         //Jump Up
         //Using GetKey instead of GetKeyDown so the event will keep getting called

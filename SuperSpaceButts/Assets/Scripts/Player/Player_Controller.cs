@@ -10,10 +10,10 @@ public class Player_Controller : MonoBehaviour
     public float jumpForce = 0.0f;
     [SerializeField]
     [HideInInspector]
-    private float horizontal = 0.0f;
-    [SerializeField]
-    //[HideInInspector]
     private Vector2 Movement = new Vector2(0.0f, 0.0f);
+    [SerializeField]
+    [HideInInspector]
+    private float dT = 0.0f;
     private Rigidbody2D playerBody;
 
     // Use this for initialization
@@ -30,25 +30,27 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Trying to decide if I should leave this here or move it to InputManager.
-        //We shall see what happens
-        horizontal = Input.GetAxis("Horizontal");
-        playerBody.AddForce(Movement);
+        //playerBody.AddForce(Movement);
+        playerBody.velocity = Movement;
         Movement = new Vector2(0.0f, 0.0f);
+        dT = Time.deltaTime;
     }
 
     #region Listener-Handles
     private void Handle_OnMoveForward()
     {
-        Movement = new Vector2(horizontal * moveForce, 0.0f);
+        //rigidbody2D.AddForce(Vector3.up * jumpSpeed * Time.deltaTime)
+        Movement = new Vector2((InputManager.Instance.horizontal * moveForce), 0.0f);
     }
     private void Handle_OnMoveBackward()
     {
-        Movement = new Vector2((horizontal * moveForce), 0.0f);
+        Movement = new Vector2((InputManager.Instance.horizontal * moveForce), 0.0f);
     }
     private void Handle_OnJump()
     {
         Movement = new Vector2(0.0f, jumpForce);
+        playerBody.AddForce(Movement);
+        Movement = new Vector2(0.0f, 0.0f);
     }
     private void Handle_OnUse()
     {
