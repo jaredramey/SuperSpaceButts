@@ -11,9 +11,6 @@ public class Player_Controller : MonoBehaviour
     [SerializeField]
     [HideInInspector]
     private Vector2 Movement = new Vector2(0.0f, 0.0f);
-    [SerializeField]
-    [HideInInspector]
-    private float dT = 0.0f;
     private Rigidbody2D playerBody;
 
     // Use this for initialization
@@ -30,27 +27,21 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //playerBody.AddForce(Movement);
-        playerBody.velocity = Movement;
-        Movement = new Vector2(0.0f, 0.0f);
-        dT = Time.deltaTime;
+
     }
 
     #region Listener-Handles
     private void Handle_OnMoveForward()
     {
-        //rigidbody2D.AddForce(Vector3.up * jumpSpeed * Time.deltaTime)
-        Movement = new Vector2((InputManager.Instance.horizontal * moveForce), 0.0f);
+        playerBody.AddForce(-(Vector3.left) * moveForce);
     }
     private void Handle_OnMoveBackward()
     {
-        Movement = new Vector2((InputManager.Instance.horizontal * moveForce), 0.0f);
+        playerBody.AddForce((Vector3.left) * moveForce);
     }
     private void Handle_OnJump()
     {
-        Movement = new Vector2(0.0f, jumpForce);
-        playerBody.AddForce(Movement);
-        Movement = new Vector2(0.0f, 0.0f);
+        playerBody.AddForce((Vector3.up) * jumpForce);
     }
     private void Handle_OnUse()
     {
