@@ -12,11 +12,26 @@ public class Player_Controller : MonoBehaviour
     [HideInInspector]
     private Vector2 Movement = new Vector2(0.0f, 0.0f);
     private Rigidbody2D playerBody;
+    [HideInInspector]
+    private GameObject GroundCheck;
+    [HideInInspector]
+    private bool canJump = true;
 
     // Use this for initialization
     void Start()
     {
         playerBody = gameObject.GetComponent<Rigidbody2D>();
+        GroundCheck = new GameObject();
+        if(GroundCheck)
+        {
+            GroundCheck.name = "GroundCheck";
+            GroundCheck.layer = LayerMask.NameToLayer("Player") ;
+            GroundCheck.AddComponent<CircleCollider2D>();
+            GroundCheck.GetComponent<CircleCollider2D>().isTrigger = true;
+            GroundCheck.GetComponent<CircleCollider2D>().radius = 1.0f;
+            GroundCheck.transform.parent = gameObject.transform;
+            GroundCheck.transform.position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - 1.283f);
+        }
 
         InputManager.Instance.OnMoveForward.AddListener(Handle_OnMoveForward);
         InputManager.Instance.OnMoveBackward.AddListener(Handle_OnMoveBackward);
@@ -27,7 +42,10 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(!canJump && GroundCheck.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.NameToLayer("Ground")))
+        {
+            canJump = !canJump;
+        }
     }
 
     #region Listener-Handles
@@ -41,7 +59,11 @@ public class Player_Controller : MonoBehaviour
     }
     private void Handle_OnJump()
     {
-        playerBody.AddForce((Vector3.up) * jumpForce);
+        if (canJump)
+        {
+            playerBody.AddForce((Vector3.up) * jumpForce);
+        }
+        canJump = !canJump;
     }
     private void Handle_OnUse()
     {

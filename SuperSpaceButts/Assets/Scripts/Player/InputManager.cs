@@ -32,9 +32,6 @@ public class InputManager : MonoBehaviour
     #region Var-Init-Area
     [SerializeField]
     public float jumpCoolDownTime = 0.0f;
-    [SerializeField]
-    private float jumpTimer = 0.0f;
-    private bool canJump = true;
     #endregion
 
     // Use this for initialization
@@ -70,7 +67,6 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             OnJump.Invoke();
-            canJump = !canJump;
         }
         //Move Forward
         //Using GetKey instead of GetKeyDown so the event will keep getting called
@@ -117,18 +113,5 @@ public class InputManager : MonoBehaviour
             OnAddPoints.Invoke();
         }
         #endregion
-    }
-
-    void FixedUpdate()
-    {
-        if(jumpTimer > 0 && !canJump)
-        {
-            jumpTimer--;
-        }
-        else if(jumpTimer <= 0)
-        {
-            jumpTimer = jumpCoolDownTime;
-            canJump = !canJump;
-        }
     }
 }
