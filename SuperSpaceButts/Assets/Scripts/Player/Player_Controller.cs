@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player_Controller : MonoBehaviour
 {
+    #region Variables_Private
     [SerializeField]
     public float moveForce = 0.0f;
     [SerializeField]
@@ -16,13 +18,15 @@ public class Player_Controller : MonoBehaviour
     private GameObject GroundCheck;
     [HideInInspector]
     private bool canJump = true;
+    #endregion
 
     // Use this for initialization
     void Start()
     {
         playerBody = gameObject.GetComponent<Rigidbody2D>();
         GroundCheck = new GameObject();
-        if(GroundCheck)
+        #region GroundCheck_Creation
+        if (GroundCheck)
         {
             GroundCheck.name = "GroundCheck";
             GroundCheck.layer = LayerMask.NameToLayer("Player") ;
@@ -32,6 +36,7 @@ public class Player_Controller : MonoBehaviour
             GroundCheck.transform.parent = gameObject.transform;
             GroundCheck.transform.position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - 1.283f);
         }
+        #endregion
 
         InputManager.Instance.OnMoveForward.AddListener(Handle_OnMoveForward);
         InputManager.Instance.OnMoveBackward.AddListener(Handle_OnMoveBackward);
@@ -42,7 +47,9 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!canJump && GroundCheck.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.NameToLayer("Ground")))
+        //There's gotta be a better way to check this...
+        //TODO: Figure which is better for checking when the player has landed.
+        if (!canJump && GroundCheck.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.NameToLayer("Ground")))
         {
             canJump = !canJump;
         }
