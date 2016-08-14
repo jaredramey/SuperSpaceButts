@@ -8,6 +8,8 @@ public class Player_Controller : MonoBehaviour
     #region Variables_Private
     private Rigidbody2D playerBody;
     [SerializeField]
+    public float downwardForce = 0.0f;
+    [SerializeField]
     [HideInInspector]
     private float dt = 0.0f;
     [SerializeField]
@@ -42,6 +44,12 @@ public class Player_Controller : MonoBehaviour
     void FixedUpdate()
     {
         dt = Time.deltaTime;
+
+        //push the player down faster on decent
+        if (playerBody.velocity.y < 0)
+        {
+            playerBody.velocity = new Vector2(playerBody.velocity.x, playerBody.velocity.y * downwardForce);
+        }
     }
 
     //Better collision check with ground for now. If I think of something better
@@ -59,17 +67,17 @@ public class Player_Controller : MonoBehaviour
     #region Listener_Handles
     private void Handle_OnMoveForward()
     {
-        playerBody.AddForce(-(Vector3.left) * moveForce);
+        playerBody.AddForce(((Vector2.left) * moveForce) * -InputManager.Instance.horizontal);
     }
     private void Handle_OnMoveBackward()
     {
-        playerBody.AddForce((Vector3.left) * moveForce);
+        playerBody.AddForce(((Vector2.left) * moveForce) * -InputManager.Instance.horizontal);
     }
     private void Handle_OnJump()
     {
         if (canJump)
         {
-            playerBody.AddForce((Vector3.up) * jumpForce);
+            playerBody.AddForce((Vector2.up) * jumpForce);
             canJump = !canJump;
         }
     }
