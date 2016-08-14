@@ -6,6 +6,10 @@ using System.Collections;
 public class Player_Controller : MonoBehaviour
 {
     #region Variables_Private
+    private Rigidbody2D playerBody;
+    [SerializeField]
+    [HideInInspector]
+    private float dt = 0.0f;
     [SerializeField]
     public float moveForce = 0.0f;
     [SerializeField]
@@ -15,7 +19,6 @@ public class Player_Controller : MonoBehaviour
     //May or may not end up using this as a means to move the player around.
     //Doesn't seem like I will be right now but just in case it's the best way.
     private Vector2 Movement = new Vector2(0.0f, 0.0f);
-    private Rigidbody2D playerBody;
     [HideInInspector]
     private bool canJump = true;
     #endregion
@@ -35,6 +38,10 @@ public class Player_Controller : MonoBehaviour
     void Update()
     {
 
+    }
+    void FixedUpdate()
+    {
+        dt = Time.deltaTime;
     }
 
     //Better collision check with ground for now. If I think of something better
