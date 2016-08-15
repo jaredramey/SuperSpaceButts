@@ -7,6 +7,7 @@ public class Player_Controller : MonoBehaviour
 {
     #region Variables_Private
     private Rigidbody2D playerBody;
+    private Animator playerAnimator;
     [SerializeField]
     public float downwardForce = 0.0f;
     [SerializeField]
@@ -29,6 +30,7 @@ public class Player_Controller : MonoBehaviour
     void Start()
     {
         playerBody = gameObject.GetComponent<Rigidbody2D>();
+        playerAnimator = gameObject.GetComponent<Animator>();
 
         InputManager.Instance.OnMoveForward.AddListener(Handle_OnMoveForward);
         InputManager.Instance.OnMoveBackward.AddListener(Handle_OnMoveBackward);
@@ -39,7 +41,9 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Update the float so the animation plays
+        //using abs to make it so the animation will go no matter which way the player runs
+        playerAnimator.SetFloat("xSpeed", Mathf.Abs(playerBody.velocity.x));
     }
     void FixedUpdate()
     {
@@ -59,6 +63,8 @@ public class Player_Controller : MonoBehaviour
         //Check to see if the player has hit the ground
         if (!canJump && col.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            //Set jump state back to false
+            playerAnimator.SetBool("Jump", false);
             //if so change canJump back to true
             canJump = !canJump;
         }
@@ -67,17 +73,27 @@ public class Player_Controller : MonoBehaviour
     #region Listener_Handles
     private void Handle_OnMoveForward()
     {
+        //Add force to push the player right
         playerBody.AddForce(((Vector2.left) * moveForce) * -InputManager.Instance.horizontal);
+        //Flip the player back to facing the right
+        GetComponent<SpriteRenderer>().flipX = false;
     }
     private void Handle_OnMoveBackward()
     {
+        //Add force to push the player left
         playerBody.AddForce(((Vector2.left) * moveForce) * -InputManager.Instance.horizontal);
+        //Flip the player to face the left
+        GetComponent<SpriteRenderer>().flipX = true;
     }
     private void Handle_OnJump()
     {
         if (canJump)
         {
+            //Set jump state to true
+            playerAnimator.SetBool("Jump", true);
+            //Apply force to player
             playerBody.AddForce((Vector2.up) * jumpForce);
+            //Make it so the player can't jump till he hit's the ground
             canJump = !canJump;
         }
     }
