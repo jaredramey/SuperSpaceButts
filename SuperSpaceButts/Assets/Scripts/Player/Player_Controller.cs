@@ -11,17 +11,9 @@ public class Player_Controller : MonoBehaviour
     [SerializeField]
     public float downwardForce = 0.0f;
     [SerializeField]
-    [HideInInspector]
-    private float dt = 0.0f;
-    [SerializeField]
     public float moveForce = 0.0f;
     [SerializeField]
     public float jumpForce = 0.0f;
-    [SerializeField]
-    [HideInInspector]
-    //May or may not end up using this as a means to move the player around.
-    //Doesn't seem like I will be right now but just in case it's the best way.
-    private Vector2 Movement = new Vector2(0.0f, 0.0f);
     [HideInInspector]
     private bool canJump = true;
     #endregion
@@ -47,8 +39,6 @@ public class Player_Controller : MonoBehaviour
     }
     void FixedUpdate()
     {
-        dt = Time.deltaTime;
-
         //push the player down faster on decent
         if (playerBody.velocity.y < 0)
         {
