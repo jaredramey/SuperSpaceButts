@@ -36,6 +36,19 @@ public class Player_Controller : MonoBehaviour
         //Update the float so the animation plays
         //using abs to make it so the animation will go no matter which way the player runs
         playerAnimator.SetFloat("xSpeed", Mathf.Abs(playerBody.velocity.x));
+
+        //If the player isn't moving up or down then the jump animation shouldn't be playing
+        //This is kinda hacky for some use cases so i'll have to test this a bit.
+        if (playerBody.velocity.y == 0)
+        {
+            playerAnimator.SetBool("Jump", false);
+        }
+        //Set animation back to jumping if player is falling
+        //Should make a custom animation for that laters
+        else if (playerBody.velocity.y < 0 && playerAnimator.GetBool("Jump") == false)
+        {
+            playerAnimator.SetBool("Jump", true);
+        }
     }
     void FixedUpdate()
     {
@@ -53,10 +66,14 @@ public class Player_Controller : MonoBehaviour
         //Check to see if the player has hit the ground
         if (!canJump && col.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            //Set jump state back to false
-            playerAnimator.SetBool("Jump", false);
-            //if so change canJump back to true
-            canJump = !canJump;
+            if (col.gameObject.transform.position.y <= gameObject.transform.position.y)
+            {
+
+                //Set jump state back to false2
+                playerAnimator.SetBool("Jump", false);
+                //if so change canJump back to true
+                canJump = !canJump;
+            }
         }
     }
 
