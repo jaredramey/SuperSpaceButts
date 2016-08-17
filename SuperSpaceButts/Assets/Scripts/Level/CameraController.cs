@@ -4,7 +4,10 @@ using System.Collections;
 [RequireComponent(typeof(BoxCollider2D))]
 public class CameraController : MonoBehaviour
 {
+    //Leaving this public for instances where I don't want the camera to move
     public bool isFollowing { get; set; }
+
+    #region Variables_Private
     private Transform player;
     private BoxCollider2D cameraBounds;
     [SerializeField]
@@ -27,15 +30,19 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     [HideInInspector]
     private int currentZoom;
+    #endregion
 
     // Use this for initialization
     void Start()
     {
+        #region Input_Listeners
         InputManager.Instance.OnZoomIn.AddListener(Handle_OnZoomIn);
         InputManager.Instance.OnzoomOut.AddListener(Handle_OnZoomOut);
+        #endregion
 
-        //Set currentZoom to minZoom to start
-        currentZoom = minZoom;
+        #region Variable_Init
+        //Set currentZoom to midZoom to start
+        currentZoom = maxZoom - minZoom;
         Camera.main.orthographicSize = currentZoom;
 
         player = GameObject.Find("Player").gameObject.transform;
@@ -44,27 +51,33 @@ public class CameraController : MonoBehaviour
         if(!player)
         {
             Debug.Log("Player not found! Exiting application....");
+            //TODO: Exit Application
         }
 
         cameraBounds = GetComponent<BoxCollider2D>();
         if(!cameraBounds)
         {
             Debug.Log("Camera Bounds not found! Exiting application....");
+            //TODO: Exit Application
         }
 
         min = cameraBounds.bounds.min;
         max = cameraBounds.bounds.max;
         isFollowing = true;
+        #endregion
     }
 
     // Update is called once per frame
     void Update()
     {
+        #region Variable_Updates
         float x = transform.position.x;
         float y = transform.position.y;
         dt = Time.deltaTime;
+        #endregion
 
-        if(isFollowing)
+        #region Camera_Follow_Update
+        if (isFollowing)
         {
             //If camera is outside the margine specified then smooth it so it doesn't go outside of it
             if(Mathf.Abs(x - player.position.x) > margin.x)
@@ -76,7 +89,9 @@ public class CameraController : MonoBehaviour
                 y = Mathf.Lerp(y, player.position.y, smoothing.y * dt);
             }
         }
+        #endregion
 
+        #region Camera_Update
         //Get half the width of the camera
         float cameraHalfWidth = Camera.main.orthographicSize * ((float) Screen.width/ Screen.height);
 
@@ -85,8 +100,10 @@ public class CameraController : MonoBehaviour
         y = Mathf.Clamp(y, min.y + cameraHalfWidth, max.y - cameraHalfWidth);
 
         transform.position = new Vector3(x, y, transform.position.z);
+        #endregion
     }
 
+    #region Handle_Input
     //Allow the player to Zoom in and Out as wanted (To an extent)
     private void Handle_OnZoomOut()
     {
@@ -106,4 +123,5 @@ public class CameraController : MonoBehaviour
             Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize - 1);
         }
     }
+    #endregion
 }

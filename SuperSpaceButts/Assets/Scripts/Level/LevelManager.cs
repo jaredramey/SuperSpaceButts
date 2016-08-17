@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//TODO: work on level manager
 public class LevelManager : MonoBehaviour
 {
 

@@ -3,9 +3,12 @@ using System.Collections;
 
 public class Player_Score : MonoBehaviour
 {
+    #region Variables_Private
     [SerializeField]
     private int playerScore = 0;
+    #endregion
 
+    #region Custom_Functions
     public void AddPoints(int pointsToAdd)
     {
         playerScore = playerScore + pointsToAdd;
@@ -20,4 +23,5 @@ public class Player_Score : MonoBehaviour
     {
         return playerScore;
     }
+    #endregion
 }

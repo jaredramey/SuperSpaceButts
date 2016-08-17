@@ -21,18 +21,23 @@ public class Player_Controller : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        #region Variable_Init
         playerBody = gameObject.GetComponent<Rigidbody2D>();
         playerAnimator = gameObject.GetComponent<Animator>();
+        #endregion
 
+        #region Input_Listeners
         InputManager.Instance.OnMoveForward.AddListener(Handle_OnMoveForward);
         InputManager.Instance.OnMoveBackward.AddListener(Handle_OnMoveBackward);
         InputManager.Instance.OnJump.AddListener(Handle_OnJump);
         InputManager.Instance.OnUse.AddListener(Handle_OnUse);
+        #endregion
     }
 
     // Update is called once per frame
     void Update()
     {
+        #region Animation_Update
         //Update the float so the animation plays
         //using abs to make it so the animation will go no matter which way the player runs
         playerAnimator.SetFloat("xSpeed", Mathf.Abs(playerBody.velocity.x));
@@ -49,6 +54,7 @@ public class Player_Controller : MonoBehaviour
         {
             playerAnimator.SetBool("Jump", true);
         }
+        #endregion
     }
     void FixedUpdate()
     {
@@ -59,6 +65,7 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
+    #region Ground_Check
     //Better collision check with ground for now. If I think of something better
     //or someone lets me know of a better way I will change it.
     void OnCollisionEnter2D(Collision2D col)
@@ -76,6 +83,7 @@ public class Player_Controller : MonoBehaviour
             }
         }
     }
+    #endregion
 
     #region Listener_Handles
     private void Handle_OnMoveForward()
