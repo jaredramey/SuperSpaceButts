@@ -20,6 +20,10 @@ public class InputManager : MonoBehaviour
     [HideInInspector]
     public UnityEvent OnUse = new UnityEvent();
     [HideInInspector]
+    public UnityEvent OnZoomIn = new UnityEvent();
+    [HideInInspector]
+    public UnityEvent OnzoomOut = new UnityEvent();
+    [HideInInspector]
     public UnityEvent OnAttack = new UnityEvent();
     [HideInInspector]
     public UnityEvent OnEscape = new UnityEvent();
@@ -27,6 +31,10 @@ public class InputManager : MonoBehaviour
     public UnityEvent OnAddHealth = new UnityEvent();
     [HideInInspector]
     public UnityEvent OnAddPoints = new UnityEvent();
+    [HideInInspector]
+    public UnityEvent OnTakeScreenShot = new UnityEvent();
+    [HideInInspector]
+    public UnityEvent OnGetWorldPos = new UnityEvent();
     #endregion
 
     #region Var-Init-Area
@@ -90,8 +98,19 @@ public class InputManager : MonoBehaviour
         {
             OnAttack.Invoke();
         }
+        //Zoom in
+        if(Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetKeyDown(KeyCode.I))
+        {
+            OnZoomIn.Invoke();
+        }
+        //Zoom Out
+        if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetKeyDown(KeyCode.O))
+        {
+            OnzoomOut.Invoke();
+        }
         #endregion
 
+        //TODO: Hook up debug commands
         #region Debug-Application-Keys
         //Escape will be later used for a pause menu but for now just needs to exit application
         //so i'm going to label it as a debug key strike for now
@@ -110,6 +129,13 @@ public class InputManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.G) && Input.GetKeyDown(KeyCode.P))
         {
             OnAddPoints.Invoke();
+        }
+        //Take a screen shot and get world pos for later debuging purposes
+        //once a build has been released
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            OnTakeScreenShot.Invoke();
+            OnGetWorldPos.Invoke();
         }
         #endregion
     }
