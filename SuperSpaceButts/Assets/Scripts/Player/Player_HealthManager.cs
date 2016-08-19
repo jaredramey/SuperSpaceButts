@@ -33,6 +33,8 @@ public class Player_HealthManager : MonoBehaviour
     {
         playerAnimator.SetBool("Damaged", true);
         playerHealth = playerHealth - damage;
+        //Outputting new player health right now since there is no UI
+        Debug.Log("Player has been Hurt! Player health now " + playerHealth);
     }
 
     public void HealPlayer(int health)
