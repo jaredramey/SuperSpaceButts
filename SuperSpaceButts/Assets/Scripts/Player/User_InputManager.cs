@@ -2,9 +2,9 @@
 using UnityEngine.Events;
 using System.Collections;
 
-public class InputManager : MonoBehaviour
+public class User_InputManager : MonoBehaviour
 {
-    private static InputManager instance = null;
+    private static User_InputManager instance = null;
 
     [SerializeField]
     [HideInInspector]
@@ -48,16 +48,16 @@ public class InputManager : MonoBehaviour
 
     }
 
-    public static InputManager Instance
+    public static User_InputManager Instance
     {
         get
         {
-            if(instance == null)
+            if (instance == null)
             {
-                instance = (InputManager)FindObjectOfType(typeof(InputManager));
-                if(instance == null)
+                instance = (User_InputManager)FindObjectOfType(typeof(User_InputManager));
+                if (instance == null)
                 {
-                    instance = (new GameObject("InputManager")).AddComponent<InputManager>();
+                    instance = (new GameObject("User_InputManager")).AddComponent<User_InputManager>();
                 }
             }
             return instance;
@@ -77,7 +77,7 @@ public class InputManager : MonoBehaviour
         }
         //Move Forward
         //Using GetKey instead of GetKeyDown so the event will keep getting called
-        if(Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             OnMoveForward.Invoke();
         }
@@ -90,16 +90,18 @@ public class InputManager : MonoBehaviour
         #endregion
 
         #region Player-Commands
-        if(Input.GetKeyDown(KeyCode.E))
+        //For the eventual use item key-bind
+        if (Input.GetKeyDown(KeyCode.E))
         {
             OnUse.Invoke();
         }
-        if(Input.GetKeyDown(KeyCode.Mouse1))
+        //For the eventual use of power up attacks
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             OnAttack.Invoke();
         }
         //Zoom in
-        if(Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetKeyDown(KeyCode.I))
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetKeyDown(KeyCode.I))
         {
             OnZoomIn.Invoke();
         }
@@ -120,14 +122,16 @@ public class InputManager : MonoBehaviour
         }
         //Add health
         //Gain(G) Health(H)
-        if(Input.GetKeyDown(KeyCode.G) && Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKey(KeyCode.G) && Input.GetKey(KeyCode.H))
         {
+            Debug.Log("Activating cheat: Add Health +1");
             OnAddHealth.Invoke();
         }
         //Add Points
         //Gain(G) Points(P)
-        if(Input.GetKeyDown(KeyCode.G) && Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKey(KeyCode.G) && Input.GetKey(KeyCode.P))
         {
+            Debug.Log("Activating cheat: Add Points +10");
             OnAddPoints.Invoke();
         }
         //Take a screen shot and get world pos for later debuging purposes

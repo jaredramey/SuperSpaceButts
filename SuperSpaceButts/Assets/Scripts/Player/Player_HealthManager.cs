@@ -9,12 +9,19 @@ public class Player_HealthManager : MonoBehaviour
     private int playerHealth = 0;
     #endregion
 
+    #region Input_Listeners
+    #endregion
+
     //When the level starts the player should have three health
     void Start()
     {
         #region Variable_Init
         playerHealth = 3;
         playerAnimator = GetComponent<Animator>();
+        #endregion
+
+        #region Add_Listeners
+        User_InputManager.Instance.OnAddHealth.AddListener(Handle_OnCheatAddHealth);
         #endregion
     }
 
@@ -45,6 +52,12 @@ public class Player_HealthManager : MonoBehaviour
     public int GetPlayerHealth()
     {
         return playerHealth;
+    }
+
+    private void Handle_OnCheatAddHealth()
+    {
+        playerHealth = playerHealth + 1;
+        Debug.Log("Added health! Player health is now: " + playerHealth);
     }
     #endregion
 }

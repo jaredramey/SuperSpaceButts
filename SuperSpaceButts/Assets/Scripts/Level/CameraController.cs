@@ -36,8 +36,8 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         #region Input_Listeners
-        InputManager.Instance.OnZoomIn.AddListener(Handle_OnZoomIn);
-        InputManager.Instance.OnzoomOut.AddListener(Handle_OnZoomOut);
+        User_InputManager.Instance.OnZoomIn.AddListener(Handle_OnZoomIn);
+        User_InputManager.Instance.OnzoomOut.AddListener(Handle_OnZoomOut);
         #endregion
 
         #region Variable_Init

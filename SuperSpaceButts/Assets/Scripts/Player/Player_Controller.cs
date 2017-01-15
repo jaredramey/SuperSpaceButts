@@ -27,10 +27,10 @@ public class Player_Controller : MonoBehaviour
         #endregion
 
         #region Input_Listeners
-        InputManager.Instance.OnMoveForward.AddListener(Handle_OnMoveForward);
-        InputManager.Instance.OnMoveBackward.AddListener(Handle_OnMoveBackward);
-        InputManager.Instance.OnJump.AddListener(Handle_OnJump);
-        InputManager.Instance.OnUse.AddListener(Handle_OnUse);
+        User_InputManager.Instance.OnMoveForward.AddListener(Handle_OnMoveForward);
+        User_InputManager.Instance.OnMoveBackward.AddListener(Handle_OnMoveBackward);
+        User_InputManager.Instance.OnJump.AddListener(Handle_OnJump);
+        User_InputManager.Instance.OnUse.AddListener(Handle_OnUse);
         #endregion
     }
 
@@ -89,14 +89,14 @@ public class Player_Controller : MonoBehaviour
     private void Handle_OnMoveForward()
     {
         //Add force to push the player right
-        playerBody.AddForce(((Vector2.left) * moveForce) * -InputManager.Instance.horizontal);
+        playerBody.AddForce(((Vector2.left) * moveForce) * -User_InputManager.Instance.horizontal);
         //Flip the player back to facing the right
         GetComponent<SpriteRenderer>().flipX = false;
     }
     private void Handle_OnMoveBackward()
     {
         //Add force to push the player left
-        playerBody.AddForce(((Vector2.left) * moveForce) * -InputManager.Instance.horizontal);
+        playerBody.AddForce(((Vector2.left) * moveForce) * -User_InputManager.Instance.horizontal);
         //Flip the player to face the left
         GetComponent<SpriteRenderer>().flipX = true;
     }
