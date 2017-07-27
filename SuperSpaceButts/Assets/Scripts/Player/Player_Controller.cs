@@ -43,13 +43,13 @@ public class Player_Controller : MonoBehaviour
         playerAnimator.SetFloat("xSpeed", Mathf.Abs(playerBody.velocity.x));
 
         //If the player isn't moving up or down then the jump animation shouldn't be playing
-        //This is kinda hacky for some use cases so i'll have to test this a bit.
+        //This is kinda hacky for some use cases so I'll have to test this a bit.
         if (playerBody.velocity.y == 0)
         {
             playerAnimator.SetBool("Jump", false);
         }
         //Set animation back to jumping if player is falling
-        //Should make a custom animation for that laters
+        //Should make a custom animation for that later
         else if (playerBody.velocity.y < 0 && playerAnimator.GetBool("Jump") == false)
         {
             playerAnimator.SetBool("Jump", true);

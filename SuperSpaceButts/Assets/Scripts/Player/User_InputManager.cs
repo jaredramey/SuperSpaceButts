@@ -10,7 +10,7 @@ public class User_InputManager : MonoBehaviour
     [HideInInspector]
     public float horizontal = 0.0f;
 
-    #region Event-Init-Area
+    #region EventInitArea
     [HideInInspector]
     public UnityEvent OnMoveForward = new UnityEvent();
     [HideInInspector]
@@ -37,7 +37,7 @@ public class User_InputManager : MonoBehaviour
     public UnityEvent OnGetWorldPos = new UnityEvent();
     #endregion
 
-    #region Var-Init-Area
+    #region VarInitArea
     [SerializeField]
     public float jumpCoolDownTime = 0.0f;
     #endregion
@@ -115,7 +115,7 @@ public class User_InputManager : MonoBehaviour
         //TODO: Hook up debug commands
         #region Debug-Application-Keys
         //Escape will be later used for a pause menu but for now just needs to exit application
-        //so i'm going to label it as a debug key strike for now
+        //so I'm going to label it as a debug key strike for now
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             OnEscape.Invoke();
@@ -134,7 +134,7 @@ public class User_InputManager : MonoBehaviour
             Debug.Log("Activating cheat: Add Points +10");
             OnAddPoints.Invoke();
         }
-        //Take a screen shot and get world pos for later debuging purposes
+        //Take a screen shot and get world pos for later debugging purposes
         //once a build has been released
         if (Input.GetKeyDown(KeyCode.F12))
         {

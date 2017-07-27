@@ -107,7 +107,7 @@ public class CameraController : MonoBehaviour
     //Allow the player to Zoom in and Out as wanted (To an extent)
     private void Handle_OnZoomOut()
     {
-        Debug.Log("Zooming in");
+        //Debug.Log("Zooming in");
         if(currentZoom < maxZoom)
         {
             currentZoom += 1;
@@ -116,7 +116,7 @@ public class CameraController : MonoBehaviour
     }
     private void Handle_OnZoomIn()
     {
-        Debug.Log("Zooming out");
+        //Debug.Log("Zooming out");
         if (currentZoom > minZoom)
         {
             currentZoom -= 1;

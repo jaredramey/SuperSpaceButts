@@ -22,7 +22,7 @@ public class Spike_Controller : MonoBehaviour
         #region Hurt_Player
         if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            player.GetComponent<Player_HealthManager>().HurtPlayer(damageToDeal);
+            Player_HealthManager.Instance.OnPlayerTakeDamage.Invoke();
         }
         #endregion
     }
