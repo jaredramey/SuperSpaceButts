@@ -15,10 +15,7 @@ class MenuSelections
 
 public class MainMenu_Controller : MonoBehaviour
 {
-    //TODO: Remove these variables in place of custom class container.
     private GameObject pointer;
-    private GameObject[] Positions;
-    private int currentPosition = 0;
 
     //TOOD: Work off of these variables
     private List<MenuSelections> menu = new List<MenuSelections>();
@@ -29,8 +26,6 @@ public class MainMenu_Controller : MonoBehaviour
     void Start()
     {
         pointer = GameObject.Find("Pointer");
-        //TODO: Remove this
-        Positions = GameObject.FindGameObjectsWithTag("MenuPositions");
 
         menuSections = GameObject.FindGameObjectsWithTag("MenuSection");
 
@@ -49,9 +44,7 @@ public class MainMenu_Controller : MonoBehaviour
             menu.Add(temp);
         }
 
-        Array.Sort(Positions, ComparePositions);
-
-        pointer.transform.position = Positions[currentPosition].transform.position;
+        pointer.transform.position = menu[0].positions[0].transform.position;
 
         InputHandler_MainMenu.Instance.OnMenuUp.AddListener(Handle_OnMenuUp);
         InputHandler_MainMenu.Instance.OnMenuDown.AddListener(Handle_OnMenuDown);
