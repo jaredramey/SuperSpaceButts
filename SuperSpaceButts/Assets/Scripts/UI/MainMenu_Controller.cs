@@ -4,18 +4,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+class MenuSelections
+{
+    public GameObject menuSelection;
+    public List<GameObject> menuOptions = new List<GameObject>();
+    public List<GameObject> positions = new List<GameObject>();
+    public int currentPosition = 0;
+    public bool isActive = true;
+}
+
 public class MainMenu_Controller : MonoBehaviour
 {
+    //TODO: Remove these variables in place of custom class container.
     private GameObject pointer;
     private GameObject[] Positions;
     private int currentPosition = 0;
+
+    //TOOD: Work off of these variables
+    private List<MenuSelections> menu = new List<MenuSelections>();
+    private GameObject[] menuSections;
     
 
     // Use this for initialization
     void Start()
     {
         pointer = GameObject.Find("Pointer");
+        //TODO: Remove this
         Positions = GameObject.FindGameObjectsWithTag("MenuPositions");
+
+        menuSections = GameObject.FindGameObjectsWithTag("MenuSection");
+
+        foreach(GameObject menuSection in menuSections)
+        {
+            MenuSelections temp = new MenuSelections();
+            temp.menuSelection = menuSection;
+            Debug.Log(temp.menuSelection.transform.childCount);
+            foreach(Transform child in temp.menuSelection.transform)
+            {
+                temp.menuOptions.Add(child.gameObject);
+                temp.positions.Add(child.transform.GetChild(0).gameObject);
+            }
+            Debug.Log("menuOptions size = " + temp.menuOptions.Count + "\n" +
+                      "positions size = " + temp.positions.Count + "\n");
+            menu.Add(temp);
+        }
 
         Array.Sort(Positions, ComparePositions);
 
@@ -41,21 +73,32 @@ public class MainMenu_Controller : MonoBehaviour
     private void Handle_OnMenuUp()
     {
         Debug.Log("Menu up\n");
+        //if(currentPosition > 0)
+        //{
+        //    currentPosition--;
+        //    pointer.transform.position = Positions[currentPosition].transform.position;
+        //}
 
-        if(currentPosition > 0)
+        if(menu[0].currentPosition > 0)
         {
-            currentPosition--;
-            pointer.transform.position = Positions[currentPosition].transform.position;
+            menu[0].currentPosition--;
+            pointer.transform.position = menu[0].positions[menu[0].currentPosition].transform.position;
         }
     }
 
     private void Handle_OnMenuDown()
     {
         Debug.Log("Menu Down\n");
-        if (currentPosition < Positions.Length - 1)
+        //if (currentPosition < Positions.Length - 1)
+        //{
+        //    currentPosition++;
+        //    pointer.transform.position = Positions[currentPosition].transform.position;
+        //}
+
+        if (menu[0].currentPosition < menu[0].positions.Count)
         {
-            currentPosition++;
-            pointer.transform.position = Positions[currentPosition].transform.position;
+            menu[0].currentPosition++;
+            pointer.transform.position = menu[0].positions[menu[0].currentPosition].transform.position;
         }
     }
 
