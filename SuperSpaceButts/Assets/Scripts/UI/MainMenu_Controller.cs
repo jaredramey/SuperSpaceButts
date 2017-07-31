@@ -10,7 +10,6 @@ class MenuSelections
     public List<GameObject> menuOptions = new List<GameObject>();
     public List<GameObject> positions = new List<GameObject>();
     public int currentPosition = 0;
-    public bool isActive = true;
 }
 
 public class MainMenu_Controller : MonoBehaviour
@@ -20,6 +19,7 @@ public class MainMenu_Controller : MonoBehaviour
     //TOOD: Work off of these variables
     private List<MenuSelections> menu = new List<MenuSelections>();
     private GameObject[] menuSections;
+    private int currentMenuSection = 0;
     
 
     // Use this for initialization
@@ -28,6 +28,8 @@ public class MainMenu_Controller : MonoBehaviour
         pointer = GameObject.Find("Pointer");
 
         menuSections = GameObject.FindGameObjectsWithTag("MenuSection");
+
+        Array.Sort(menuSections, ComparePositions);
 
         foreach(GameObject menuSection in menuSections)
         {
@@ -44,7 +46,15 @@ public class MainMenu_Controller : MonoBehaviour
             menu.Add(temp);
         }
 
-        pointer.transform.position = menu[0].positions[0].transform.position;
+        for(int i = 0; i < menu.Count; i++)
+        {
+            if(i != 0)
+            {
+                menu[i].menuSelection.SetActive(false);
+            }
+        }
+
+        pointer.transform.position = menu[currentMenuSection].positions[menu[currentMenuSection].currentPosition].transform.position;
 
         InputHandler_MainMenu.Instance.OnMenuUp.AddListener(Handle_OnMenuUp);
         InputHandler_MainMenu.Instance.OnMenuDown.AddListener(Handle_OnMenuDown);
@@ -72,10 +82,10 @@ public class MainMenu_Controller : MonoBehaviour
         //    pointer.transform.position = Positions[currentPosition].transform.position;
         //}
 
-        if(menu[0].currentPosition > 0)
+        if(menu[currentMenuSection].currentPosition > 0)
         {
-            menu[0].currentPosition--;
-            pointer.transform.position = menu[0].positions[menu[0].currentPosition].transform.position;
+            menu[currentMenuSection].currentPosition--;
+            pointer.transform.position = menu[currentMenuSection].positions[menu[currentMenuSection].currentPosition].transform.position;
         }
     }
 
@@ -88,20 +98,38 @@ public class MainMenu_Controller : MonoBehaviour
         //    pointer.transform.position = Positions[currentPosition].transform.position;
         //}
 
-        if (menu[0].currentPosition < menu[0].positions.Count)
+        if (menu[currentMenuSection].currentPosition < menu[currentMenuSection].positions.Count - 1)
         {
-            menu[0].currentPosition++;
-            pointer.transform.position = menu[0].positions[menu[0].currentPosition].transform.position;
+            menu[currentMenuSection].currentPosition++;
+            pointer.transform.position = menu[currentMenuSection].positions[menu[currentMenuSection].currentPosition].transform.position;
         }
     }
 
     private void Handle_OnMenuSelect()
     {
         Debug.Log("Menu Select\n");
+        if(currentMenuSection < menu.Count - 1)
+        {
+            currentMenuSection++;
+            if(menu[currentMenuSection].menuSelection.activeInHierarchy == false)
+            {
+                menu[currentMenuSection].menuSelection.SetActive(true);
+            }
+            pointer.transform.position = menu[currentMenuSection].positions[menu[currentMenuSection].currentPosition].transform.position;
+        }
     }
 
     private void Handle_OnMenuBack()
     {
         Debug.Log("Menu Back\n");
+        if (currentMenuSection > 0)
+        {
+            if (menu[currentMenuSection].menuSelection.activeInHierarchy == true)
+            {
+                menu[currentMenuSection].menuSelection.SetActive(false);
+            }
+            currentMenuSection--;
+            pointer.transform.position = menu[currentMenuSection].positions[menu[currentMenuSection].currentPosition].transform.position;
+        }
     }
 }
