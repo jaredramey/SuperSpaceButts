@@ -7,18 +7,40 @@ using UnityEngine.UI;
 class MenuOption
 {
     public GameObject currentMenuSelection;
-    public List<GameObject> childrenMenuOptions;
-    public bool hasChildrenOptions = false;
-    public int currentChild = 0;
+    public List<MenuOption> childrenMenuOptions;
+    public bool hasChildrenOptions = false, hasParentOption = false;
+    public int currentChild = 0, locationInList = 0, parentLocationInList = 0;
+
+    //Turn children of current menu option on or off
+    public void ToggleChildrenOnOff()
+    {
+        //Loop through each child
+        foreach(MenuOption child in childrenMenuOptions)
+        {
+            //If the object is active, turn it off
+            if(child.currentMenuSelection.gameObject.activeInHierarchy == true)
+            {
+                child.currentMenuSelection.gameObject.SetActive(false);
+            }
+            //If object isn't active, turn it on
+            else
+            {
+                child.currentMenuSelection.gameObject.SetActive(true);
+            }
+        }
+    }
 }
 
+/*
+ * This is attempt 2 at the UI system that I want to make for the main menu.
+*/
 public class Controller_MainMenu : MonoBehaviour
 {
     private GameObject menuPointer;
 
+    //List of menu options
     private List<MenuOption> menu;
     private MenuOption[] options = new MenuOption[3];
-    private LinkedList<MenuOption> MainSections = new LinkedList<MenuOption>();
     private GameObject[] foundMenuSections;
     private int currentMainOption = 0; //Shouldn't go past 2 (0 = Play, 1 = Options, 2 = Exit)
 
@@ -35,6 +57,15 @@ public class Controller_MainMenu : MonoBehaviour
 
         //Get the main menu options
         foundMenuSections = GameObject.FindGameObjectsWithTag("MenuOption");
+        Array.Sort(foundMenuSections, ComparePositions);
+
+        for(int i = 0; i < foundMenuSections.Length; i++)
+        {
+            //Loop through and create menu options
+            
+        }
+
+        
     }
 
     // Update is called once per frame
@@ -54,8 +85,8 @@ public class Controller_MainMenu : MonoBehaviour
         //Loop through each child object
         for(int i = 0; i < MenuOption.transform.childCount; i++)
         {
-            //Add each child to the list of children objects
-            temp.childrenMenuOptions.Add(MenuOption.transform.GetChild(i).gameObject);
+            //Add each child to the list of children options
+            temp.childrenMenuOptions.Add(CreateMenuOption(MenuOption.transform.GetChild(i).gameObject));
         }
         
         if(temp.childrenMenuOptions.Count > 0)
@@ -68,6 +99,8 @@ public class Controller_MainMenu : MonoBehaviour
 
     private int ComparePositions(GameObject left, GameObject right)
     {
+
+
         return left.name.CompareTo(right.name);
     }
 
