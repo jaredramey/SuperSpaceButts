@@ -11,6 +11,10 @@ class MenuOption
     public bool hasChildrenOptions = false, hasParentOption = false;
     public int currentChild = 0, locationInList = 0, parentLocationInList = 0;
 
+    //Default constructor for clarity and definition
+    public MenuOption()
+    { }
+
     //Turn children of current menu option on or off
     public void ToggleChildrenOnOff()
     {
@@ -40,7 +44,6 @@ public class Controller_MainMenu : MonoBehaviour
 
     //List of menu options
     private List<MenuOption> menu;
-    private MenuOption[] options = new MenuOption[3];
     private GameObject[] foundMenuSections;
     private int currentMainOption = 0; //Shouldn't go past 2 (0 = Play, 1 = Options, 2 = Exit)
 
@@ -57,12 +60,35 @@ public class Controller_MainMenu : MonoBehaviour
 
         //Get the main menu options
         foundMenuSections = GameObject.FindGameObjectsWithTag("MenuOption");
-        Array.Sort(foundMenuSections, ComparePositions);
+        Array.Sort(foundMenuSections, CompareNames);
 
+        //Turn found objects into data for menu list
         for(int i = 0; i < foundMenuSections.Length; i++)
         {
             //Loop through and create menu options
-            
+            menu.Add(CreateMenuOption(foundMenuSections[i]));
+
+            //Set location in list
+            menu[i].locationInList = i;
+
+            //Set the rest of the menu object variables
+
+            //Check to see if menu object has a parent
+            if(menu[i].currentMenuSelection.transform.parent != null)
+            {
+                menu[i].hasParentOption = true;
+
+                //Loop through menu options to find parent in list and add it.
+                for(int j = 0; j < menu.Count; j++)
+                {
+                    if(menu[j].currentMenuSelection.name == menu[i].currentMenuSelection.transform.parent.name)
+                    {
+                        Debug.Log("Parent found for " + menu[i].currentMenuSelection.name + "!");
+                        Debug.Log("Parent = " + menu[j].currentMenuSelection.name);
+                        menu[i].parentLocationInList = menu[j].locationInList;
+                    }
+                }
+            }
         }
 
         
@@ -85,19 +111,22 @@ public class Controller_MainMenu : MonoBehaviour
         //Loop through each child object
         for(int i = 0; i < MenuOption.transform.childCount; i++)
         {
-            //Add each child to the list of children options
-            temp.childrenMenuOptions.Add(CreateMenuOption(MenuOption.transform.GetChild(i).gameObject));
-        }
-        
-        if(temp.childrenMenuOptions.Count > 0)
-        {
-            temp.hasChildrenOptions = true;
+            //Add each child to the list of children options after checking to make sure it's not a position object.
+            if (temp.currentMenuSelection.transform.GetChild(i).tag == "MenuSection")
+            {
+                temp.childrenMenuOptions.Add(CreateMenuOption(MenuOption.transform.GetChild(i).gameObject));
+
+                if(temp.hasChildrenOptions == false)
+                {
+                    temp.hasChildrenOptions = true;
+                }
+            }
         }
 
         return temp;
     }
 
-    private int ComparePositions(GameObject left, GameObject right)
+    private int CompareNames(GameObject left, GameObject right)
     {
 
 
