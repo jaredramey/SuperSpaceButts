@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 class MenuOption
 {
-    public GameObject currentMenuSelection;
+    public GameObject currentMenuSelection = null;
     public List<MenuOption> childrenMenuOptions;
     public bool hasChildrenOptions = false, hasParentOption = false;
     public int currentChild = 0, locationInList = 0, parentLocationInList = 0;
@@ -57,7 +57,6 @@ public class Controller_MainMenu : MonoBehaviour
         InputHandler_MainMenu.Instance.OnMenuBack.AddListener(Handle_OnMenuBack);
 
         
-
         //Get the main menu options
         foundMenuSections = GameObject.FindGameObjectsWithTag("MenuOption");
         Array.Sort(foundMenuSections, CompareNames);
@@ -114,16 +113,30 @@ public class Controller_MainMenu : MonoBehaviour
             //Add each child to the list of children options after checking to make sure it's not a position object.
             if (temp.currentMenuSelection.transform.GetChild(i).tag == "MenuSection")
             {
-                temp.childrenMenuOptions.Add(CreateMenuOption(MenuOption.transform.GetChild(i).gameObject));
+                Debug.Log("Current menu object: " + temp.currentMenuSelection.name + " -> " + temp.currentMenuSelection.transform.GetChild(i).name);
+                MenuOption tempChild = CreateMenuOption(MenuOption.transform.GetChild(i).gameObject);
 
-                if(temp.hasChildrenOptions == false)
+                if (tempChild != null)
                 {
-                    temp.hasChildrenOptions = true;
+                    temp.childrenMenuOptions.Add(tempChild);
+
+                    if (temp.hasChildrenOptions == false)
+                    {
+                        temp.hasChildrenOptions = true;
+                    }
                 }
             }
         }
 
-        return temp;
+
+        if (temp.currentMenuSelection != null)
+        {
+            return temp;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private int CompareNames(GameObject left, GameObject right)
