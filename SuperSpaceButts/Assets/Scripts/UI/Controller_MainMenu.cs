@@ -7,7 +7,7 @@ using UnityEngine.UI;
 class MenuOption
 {
     public GameObject currentMenuSelection = null;
-    public List<MenuOption> childrenMenuOptions;
+    public List<MenuOption> childrenMenuOptions = new List<MenuOption>();
     public bool hasChildrenOptions = false, hasParentOption = false;
     public int currentChild = 0, locationInList = 0, parentLocationInList = 0;
 
@@ -43,7 +43,7 @@ public class Controller_MainMenu : MonoBehaviour
     private GameObject menuPointer;
 
     //List of menu options
-    private List<MenuOption> menu;
+    private List<MenuOption> menu = new List<MenuOption>();
     private GameObject[] foundMenuSections;
     private int currentMainOption = 0; //Shouldn't go past 2 (0 = Play, 1 = Options, 2 = Exit)
 
@@ -64,30 +64,17 @@ public class Controller_MainMenu : MonoBehaviour
         //Turn found objects into data for menu list
         for(int i = 0; i < foundMenuSections.Length; i++)
         {
-            //Loop through and create menu options
-            menu.Add(CreateMenuOption(foundMenuSections[i]));
+            MenuOption temp = CreateMenuOption(foundMenuSections[i]);
 
             //Set location in list
             menu[i].locationInList = i;
 
-            //Set the rest of the menu object variables
+            /* * * * * * * * * * * * * * * * * * * * * * *
+            \\Set the rest of the menu object variables
+             * * * * * * * * * * * * * * * * * * * * * * */
 
-            //Check to see if menu object has a parent
-            if(menu[i].currentMenuSelection.transform.parent != null)
-            {
-                menu[i].hasParentOption = true;
-
-                //Loop through menu options to find parent in list and add it.
-                for(int j = 0; j < menu.Count; j++)
-                {
-                    if(menu[j].currentMenuSelection.name == menu[i].currentMenuSelection.transform.parent.name)
-                    {
-                        Debug.Log("Parent found for " + menu[i].currentMenuSelection.name + "!");
-                        Debug.Log("Parent = " + menu[j].currentMenuSelection.name);
-                        menu[i].parentLocationInList = menu[j].locationInList;
-                    }
-                }
-            }
+            //Loop through and create menu options
+            menu.Add(temp);            
         }
 
         
@@ -107,24 +94,43 @@ public class Controller_MainMenu : MonoBehaviour
         //Set what object this is referencing
         temp.currentMenuSelection = MenuOption;
 
-        //Loop through each child object
-        for(int i = 0; i < MenuOption.transform.childCount; i++)
+        if (temp.currentMenuSelection.transform.childCount > 1)
         {
-            //Add each child to the list of children options after checking to make sure it's not a position object.
-            if (temp.currentMenuSelection.transform.GetChild(i).tag == "MenuSection")
+            //Loop through each child object
+            for (int i = 0; i < MenuOption.transform.childCount; i++)
             {
-                Debug.Log("Current menu object: " + temp.currentMenuSelection.name + " -> " + temp.currentMenuSelection.transform.GetChild(i).name);
-                MenuOption tempChild = CreateMenuOption(MenuOption.transform.GetChild(i).gameObject);
-
-                if (tempChild != null)
+                //Add each child to the list of children options after checking to make sure it's not a position object.
+                if (temp.currentMenuSelection.transform.GetChild(i).tag == "MenuSection")
                 {
-                    temp.childrenMenuOptions.Add(tempChild);
+                    Debug.Log("Current menu object: " + temp.currentMenuSelection.name + " -> " + temp.currentMenuSelection.transform.GetChild(i).name);
+                    MenuOption tempChild = CreateMenuOption(MenuOption.transform.GetChild(i).gameObject);
 
-                    if (temp.hasChildrenOptions == false)
+                    if (tempChild != null)
                     {
-                        temp.hasChildrenOptions = true;
+                        if (temp.hasChildrenOptions == false)
+                        {
+                            temp.hasChildrenOptions = true;
+                        }
+
+                        //Check for parent and set if there's a parent object.
+                        if(temp.currentMenuSelection.transform.parent != null)
+                        {
+                            temp.hasParentOption = true;
+
+                            if(temp.parentLocationInList != 0)
+                            {
+                                
+                            }
+                        }
+
+                        temp.childrenMenuOptions.Add(tempChild);
                     }
+
+                    
                 }
+
+                //Check to see if there is a parent
+
             }
         }
 
