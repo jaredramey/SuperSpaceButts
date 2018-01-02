@@ -9,11 +9,17 @@ class MenuOption
     public GameObject currentMenuSelection = null;
     public List<MenuOption> childrenMenuOptions = new List<MenuOption>();
     public bool hasChildrenOptions = false, hasParentOption = false;
-    public int currentChild = 0, locationInList = 0, parentLocationInList = 0;
+    public int currentChild = 1, locationInList = 0, parentLocationInList = 0;
 
     //Default constructor for clarity and definition
     public MenuOption()
     { }
+
+    //Get the current menu selection's pointer position
+    public Vector3 GetMenuPointerPosition()
+    {
+        return currentMenuSelection.transform.GetChild(0).transform.position;
+    }
 
     //Turn children of current menu option on or off
     public void ToggleChildrenOnOff()
@@ -56,6 +62,8 @@ public class Controller_MainMenu : MonoBehaviour
         InputHandler_MainMenu.Instance.OnMenuSelect.AddListener(Handle_OnMenuSelect);
         InputHandler_MainMenu.Instance.OnMenuBack.AddListener(Handle_OnMenuBack);
 
+        //Get the pointer game object
+        menuPointer = GameObject.Find("Pointer");
         
         //Get the main menu options
         foundMenuSections = GameObject.FindGameObjectsWithTag("MenuOption");
@@ -67,7 +75,7 @@ public class Controller_MainMenu : MonoBehaviour
             MenuOption temp = CreateMenuOption(foundMenuSections[i]);
 
             //Set location in list
-            menu[i].locationInList = i;
+            //menu[i].locationInList = i;
 
             /* * * * * * * * * * * * * * * * * * * * * * *
             \\Set the rest of the menu object variables
@@ -77,11 +85,19 @@ public class Controller_MainMenu : MonoBehaviour
             menu.Add(temp);            
         }
 
+
+        //Set pointer location to first menu option (play)
+        menuPointer.transform.position = menu[0].GetMenuPointerPosition();
         
     }
 
     // Update is called once per frame
     void Update()
+    {
+
+    }
+
+    private void SetPositionsInList()
     {
 
     }
@@ -111,22 +127,8 @@ public class Controller_MainMenu : MonoBehaviour
                         {
                             temp.hasChildrenOptions = true;
                         }
-
-                        //Check for parent and set if there's a parent object.
-                        if(temp.currentMenuSelection.transform.parent != null)
-                        {
-                            temp.hasParentOption = true;
-
-                            if(temp.parentLocationInList != 0)
-                            {
-                                
-                            }
-                        }
-
                         temp.childrenMenuOptions.Add(tempChild);
-                    }
-
-                    
+                    }  
                 }
 
                 //Check to see if there is a parent
@@ -147,8 +149,6 @@ public class Controller_MainMenu : MonoBehaviour
 
     private int CompareNames(GameObject left, GameObject right)
     {
-
-
         return left.name.CompareTo(right.name);
     }
 
