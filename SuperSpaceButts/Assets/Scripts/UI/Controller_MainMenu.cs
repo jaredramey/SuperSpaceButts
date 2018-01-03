@@ -52,6 +52,7 @@ public class Controller_MainMenu : MonoBehaviour
     private List<MenuOption> menu = new List<MenuOption>();
     private GameObject[] foundMenuSections;
     private int currentMainOption = 0; //Shouldn't go past 2 (0 = Play, 1 = Options, 2 = Exit)
+    
 
     // Use this for initialization
     void Start()
@@ -74,21 +75,18 @@ public class Controller_MainMenu : MonoBehaviour
         {
             MenuOption temp = CreateMenuOption(foundMenuSections[i]);
 
-            //Set location in list
-            //menu[i].locationInList = i;
-
             /* * * * * * * * * * * * * * * * * * * * * * *
             \\Set the rest of the menu object variables
              * * * * * * * * * * * * * * * * * * * * * * */
+            
+
 
             //Loop through and create menu options
             menu.Add(temp);            
         }
 
-
         //Set pointer location to first menu option (play)
         menuPointer.transform.position = menu[0].GetMenuPointerPosition();
-        
     }
 
     // Update is called once per frame
@@ -123,6 +121,8 @@ public class Controller_MainMenu : MonoBehaviour
 
                     if (tempChild != null)
                     {
+                        tempChild.hasParentOption = true;
+
                         if (temp.hasChildrenOptions == false)
                         {
                             temp.hasChildrenOptions = true;
