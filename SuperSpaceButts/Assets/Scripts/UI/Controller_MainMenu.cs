@@ -73,17 +73,32 @@ public class Controller_MainMenu : MonoBehaviour
         //Turn found objects into data for menu list
         for(int i = 0; i < foundMenuSections.Length; i++)
         {
-            MenuOption temp = CreateMenuOption(foundMenuSections[i]);
+            Debug.Log(i);
 
-            /* * * * * * * * * * * * * * * * * * * * * * *
-            \\Set the rest of the menu object variables
-             * * * * * * * * * * * * * * * * * * * * * * */
-            
-
+            MenuOption temp = new MenuOption();
+                
+            temp = CreateMenuOption(foundMenuSections[i]);
 
             //Loop through and create menu options
             menu.Add(temp);            
         }
+
+        for (int i = 0; i < menu.Count; i++)
+        {
+            foreach(MenuOption child in menu[i].childrenMenuOptions)
+            {
+                child.parentLocationInList = i;
+                Debug.Log(menu[i].currentMenuSelection.name + " -> " + child.currentMenuSelection.name + " Parent pos in list: " + child.parentLocationInList);
+                menu.Add(child);
+            }
+
+            menu[i].locationInList = i;
+            Debug.Log(menu[i].currentMenuSelection.name + "Pos in list = " + menu[i].locationInList);
+
+        }
+
+            Debug.Log(foundMenuSections.Length);
+        Debug.Log(menu.Count);
 
         //Set pointer location to first menu option (play)
         menuPointer.transform.position = menu[0].GetMenuPointerPosition();
@@ -116,7 +131,6 @@ public class Controller_MainMenu : MonoBehaviour
                 //Add each child to the list of children options after checking to make sure it's not a position object.
                 if (temp.currentMenuSelection.transform.GetChild(i).tag == "MenuSection")
                 {
-                    Debug.Log("Current menu object: " + temp.currentMenuSelection.name + " -> " + temp.currentMenuSelection.transform.GetChild(i).name);
                     MenuOption tempChild = CreateMenuOption(MenuOption.transform.GetChild(i).gameObject);
 
                     if (tempChild != null)
