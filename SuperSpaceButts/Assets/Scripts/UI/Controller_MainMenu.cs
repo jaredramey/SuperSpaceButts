@@ -9,7 +9,7 @@ class MenuOption
     public GameObject currentMenuSelection = null;
     public List<MenuOption> childrenMenuOptions = new List<MenuOption>();
     public bool hasChildrenOptions = false, hasParentOption = false;
-    public int currentChild = 1, locationInList = 0, parentLocationInList = 0;
+    public int locationInList = 0, parentLocationInList = 0;
 
     //Default constructor for clarity and definition
     public MenuOption()
@@ -51,7 +51,7 @@ public class Controller_MainMenu : MonoBehaviour
     //List of menu options
     private List<MenuOption> menu = new List<MenuOption>();
     private GameObject[] foundMenuSections;
-    private int currentMainOption = 0; //Shouldn't go past 2 (0 = Play, 1 = Options, 2 = Exit)
+    private int currentMenuOption = 0, parentChildrenCount = 0, currentSectionCount = 0;
     
 
     // Use this for initialization
@@ -70,11 +70,12 @@ public class Controller_MainMenu : MonoBehaviour
         foundMenuSections = GameObject.FindGameObjectsWithTag("MenuOption");
         Array.Sort(foundMenuSections, CompareNames);
 
+        parentChildrenCount = foundMenuSections.Length - 1;
+        Debug.Log(parentChildrenCount);
+
         //Turn found objects into data for menu list
         for(int i = 0; i < foundMenuSections.Length; i++)
         {
-            Debug.Log(i);
-
             MenuOption temp = new MenuOption();
                 
             temp = CreateMenuOption(foundMenuSections[i]);
@@ -88,17 +89,12 @@ public class Controller_MainMenu : MonoBehaviour
             foreach(MenuOption child in menu[i].childrenMenuOptions)
             {
                 child.parentLocationInList = i;
-                Debug.Log(menu[i].currentMenuSelection.name + " -> " + child.currentMenuSelection.name + " Parent pos in list: " + child.parentLocationInList);
                 menu.Add(child);
             }
 
             menu[i].locationInList = i;
-            Debug.Log(menu[i].currentMenuSelection.name + "Pos in list = " + menu[i].locationInList);
-
+            Debug.Log(menu[i].currentMenuSelection.name + " = " + menu[i].locationInList);
         }
-
-            Debug.Log(foundMenuSections.Length);
-        Debug.Log(menu.Count);
 
         //Set pointer location to first menu option (play)
         menuPointer.transform.position = menu[0].GetMenuPointerPosition();
@@ -113,6 +109,12 @@ public class Controller_MainMenu : MonoBehaviour
     private void SetPositionsInList()
     {
 
+    }
+
+    private void UpdatePointerPos()
+    {
+        Debug.Log("Updating pointer position.");
+        menuPointer.transform.position = menu[currentMenuOption].currentMenuSelection.transform.GetChild(0).position;
     }
 
     private MenuOption CreateMenuOption(GameObject MenuOption)
@@ -169,20 +171,56 @@ public class Controller_MainMenu : MonoBehaviour
     private void Handle_OnMenuUp()
     {
         Debug.Log("Menu up\n");
+        if(currentSectionCount > 0)
+        {
+            currentMenuOption--;
+            UpdatePointerPos();
+        }
     }
 
     private void Handle_OnMenuDown()
     {
         Debug.Log("Menu Down\n");
+        if(currentSectionCount < parentChildrenCount)
+        {
+            currentSectionCount++;
+            currentMenuOption++;
+            UpdatePointerPos();
+        }
     }
 
     private void Handle_OnMenuSelect()
     {
         Debug.Log("Menu Select\n");
+        if(menu[currentMenuOption].hasChildrenOptions)
+        {
+            menu[currentMenuOption].ToggleChildrenOnOff();
+            parentChildrenCount = menu[currentMenuOption].childrenMenuOptions.Count - 1;
+            Debug.Log(parentChildrenCount = menu[currentMenuOption].childrenMenuOptions.Count - 1);
+            currentMenuOption = menu[currentMenuOption].childrenMenuOptions[0].locationInList;
+            UpdatePointerPos();
+            currentSectionCount = 0;
+        }
     }
 
     private void Handle_OnMenuBack()
     {
         Debug.Log("Menu Back\n");
+        if(menu[currentMenuOption].hasParentOption)
+        {
+            menu[currentMenuOption].ToggleChildrenOnOff();
+            currentMenuOption = menu[currentMenuOption].parentLocationInList;
+            if(menu[currentMenuOption].hasParentOption)
+            {
+                parentChildrenCount = menu[menu[currentMenuOption].parentLocationInList].childrenMenuOptions.Count - 1;
+            }
+            else
+            {
+                parentChildrenCount = foundMenuSections.Length - 1;
+                Debug.Log(parentChildrenCount);
+            }
+            UpdatePointerPos();
+            currentSectionCount = 0;
+        }
     }
 }

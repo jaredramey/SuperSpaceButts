@@ -56,10 +56,10 @@ public class MainMenu_Controller : MonoBehaviour
 
         pointer.transform.position = menu[currentMenuSection].positions[menu[currentMenuSection].currentPosition].transform.position;
 
-        InputHandler_MainMenu.Instance.OnMenuUp.AddListener(Handle_OnMenuUp);
-        InputHandler_MainMenu.Instance.OnMenuDown.AddListener(Handle_OnMenuDown);
-        InputHandler_MainMenu.Instance.OnMenuSelect.AddListener(Handle_OnMenuSelect);
-        InputHandler_MainMenu.Instance.OnMenuBack.AddListener(Handle_OnMenuBack);
+        //InputHandler_MainMenu.Instance.OnMenuUp.AddListener(Handle_OnMenuUp);
+        //InputHandler_MainMenu.Instance.OnMenuDown.AddListener(Handle_OnMenuDown);
+        //InputHandler_MainMenu.Instance.OnMenuSelect.AddListener(Handle_OnMenuSelect);
+        //InputHandler_MainMenu.Instance.OnMenuBack.AddListener(Handle_OnMenuBack);
     }
 
     // Update is called once per frame
