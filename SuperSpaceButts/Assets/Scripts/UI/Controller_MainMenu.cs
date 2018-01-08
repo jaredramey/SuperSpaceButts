@@ -30,11 +30,13 @@ class MenuOption
             //If the object is active, turn it off
             if(child.currentMenuSelection.gameObject.activeInHierarchy == true)
             {
+                Debug.Log("Active children now turning off.");
                 child.currentMenuSelection.gameObject.SetActive(false);
             }
             //If object isn't active, turn it on
             else
             {
+                Debug.Log("Deactivated children now turning on.");
                 child.currentMenuSelection.gameObject.SetActive(true);
             }
         }
@@ -174,6 +176,7 @@ public class Controller_MainMenu : MonoBehaviour
         if(currentSectionCount > 0)
         {
             currentMenuOption--;
+            currentSectionCount--;
             UpdatePointerPos();
         }
     }
