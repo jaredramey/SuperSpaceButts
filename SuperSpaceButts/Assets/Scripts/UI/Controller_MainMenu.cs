@@ -22,23 +22,20 @@ class MenuOption
     }
 
     //Turn children of current menu option on or off
-    public void ToggleChildrenOnOff()
+    public void ToggleChildrenOn()
     {
         //Loop through each child
         foreach(MenuOption child in childrenMenuOptions)
         {
-            //If the object is active, turn it off
-            if(child.currentMenuSelection.gameObject.activeInHierarchy == true)
-            {
-                Debug.Log("Active children now turning off.");
-                child.currentMenuSelection.gameObject.SetActive(false);
-            }
-            //If object isn't active, turn it on
-            else
-            {
-                Debug.Log("Deactivated children now turning on.");
-                child.currentMenuSelection.gameObject.SetActive(true);
-            }
+            child.currentMenuSelection.gameObject.SetActive(true);
+        }
+    }
+
+    public void ToggleChildrenOff()
+    {
+        foreach (MenuOption child in childrenMenuOptions)
+        {
+            child.currentMenuSelection.gameObject.SetActive(false);
         }
     }
 }
@@ -73,7 +70,6 @@ public class Controller_MainMenu : MonoBehaviour
         Array.Sort(foundMenuSections, CompareNames);
 
         parentChildrenCount = foundMenuSections.Length - 1;
-        Debug.Log(parentChildrenCount);
 
         //Turn found objects into data for menu list
         for(int i = 0; i < foundMenuSections.Length; i++)
@@ -95,7 +91,11 @@ public class Controller_MainMenu : MonoBehaviour
             }
 
             menu[i].locationInList = i;
-            Debug.Log(menu[i].currentMenuSelection.name + " = " + menu[i].locationInList);
+            
+            if(menu[i].hasChildrenOptions)
+            {
+                menu[i].ToggleChildrenOff();
+            }
         }
 
         //Set pointer location to first menu option (play)
@@ -115,7 +115,6 @@ public class Controller_MainMenu : MonoBehaviour
 
     private void UpdatePointerPos()
     {
-        Debug.Log("Updating pointer position.");
         menuPointer.transform.position = menu[currentMenuOption].currentMenuSelection.transform.GetChild(0).position;
     }
 
@@ -172,7 +171,6 @@ public class Controller_MainMenu : MonoBehaviour
 
     private void Handle_OnMenuUp()
     {
-        Debug.Log("Menu up\n");
         if(currentSectionCount > 0)
         {
             currentMenuOption--;
@@ -183,7 +181,6 @@ public class Controller_MainMenu : MonoBehaviour
 
     private void Handle_OnMenuDown()
     {
-        Debug.Log("Menu Down\n");
         if(currentSectionCount < parentChildrenCount)
         {
             currentSectionCount++;
@@ -194,36 +191,47 @@ public class Controller_MainMenu : MonoBehaviour
 
     private void Handle_OnMenuSelect()
     {
-        Debug.Log("Menu Select\n");
         if(menu[currentMenuOption].hasChildrenOptions)
         {
-            menu[currentMenuOption].ToggleChildrenOnOff();
+            menu[currentMenuOption].ToggleChildrenOn();
             parentChildrenCount = menu[currentMenuOption].childrenMenuOptions.Count - 1;
-            Debug.Log(parentChildrenCount = menu[currentMenuOption].childrenMenuOptions.Count - 1);
             currentMenuOption = menu[currentMenuOption].childrenMenuOptions[0].locationInList;
             UpdatePointerPos();
             currentSectionCount = 0;
+        }
+        
+        if(menu[currentMenuOption].currentMenuSelection.name == "3_Exit")
+        {
+            //TODO: Add exit option
+            Debug.Log("Exit game");
+        }
+        else if (menu[currentMenuOption].currentMenuSelection.name == "")
+        {
+            //TODO: Add level option
+        }
+        else if (menu[currentMenuOption].currentMenuSelection.name == "")
+        {
+            //TODO: Add level option 2
         }
     }
 
     private void Handle_OnMenuBack()
     {
-        Debug.Log("Menu Back\n");
         if(menu[currentMenuOption].hasParentOption)
         {
-            menu[currentMenuOption].ToggleChildrenOnOff();
             currentMenuOption = menu[currentMenuOption].parentLocationInList;
-            if(menu[currentMenuOption].hasParentOption)
+            menu[currentMenuOption].ToggleChildrenOff();
+            if (menu[currentMenuOption].hasParentOption)
             {
                 parentChildrenCount = menu[menu[currentMenuOption].parentLocationInList].childrenMenuOptions.Count - 1;
+                currentSectionCount = 0;
             }
             else
             {
                 parentChildrenCount = foundMenuSections.Length - 1;
-                Debug.Log(parentChildrenCount);
+                currentSectionCount = menu[currentMenuOption].locationInList;
             }
             UpdatePointerPos();
-            currentSectionCount = 0;
         }
     }
 }
