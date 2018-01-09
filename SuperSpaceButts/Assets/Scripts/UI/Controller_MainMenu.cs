@@ -200,16 +200,17 @@ public class Controller_MainMenu : MonoBehaviour
             currentSectionCount = 0;
         }
         
-        if(menu[currentMenuOption].currentMenuSelection.name == "3_Exit")
+        else if(menu[currentMenuOption].currentMenuSelection.name == "3_Exit")
         {
             //TODO: Add exit option
             Debug.Log("Exit game");
         }
-        else if (menu[currentMenuOption].currentMenuSelection.name == "")
+        else if (menu[currentMenuOption].currentMenuSelection.name == "World_1-1")
         {
             //TODO: Add level option
+            LevelManager.Instance.LoadNextLevel("Playground");
         }
-        else if (menu[currentMenuOption].currentMenuSelection.name == "")
+        else if (menu[currentMenuOption].currentMenuSelection.name == "World_1-2")
         {
             //TODO: Add level option 2
         }
