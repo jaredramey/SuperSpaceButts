@@ -191,6 +191,11 @@ public class Controller_MainMenu : MonoBehaviour
 
     private void Handle_OnMenuSelect()
     {
+        if(menu[currentMenuOption].currentMenuSelection.name == "2_Options")
+        {
+            menuPointer.SetActive(false);
+        }
+
         if(menu[currentMenuOption].hasChildrenOptions)
         {
             menu[currentMenuOption].ToggleChildrenOn();
@@ -220,6 +225,11 @@ public class Controller_MainMenu : MonoBehaviour
     {
         if(menu[currentMenuOption].hasParentOption)
         {
+            if(menuPointer.activeInHierarchy == false)
+            {
+                menuPointer.SetActive(true);
+            }
+
             currentMenuOption = menu[currentMenuOption].parentLocationInList;
             menu[currentMenuOption].ToggleChildrenOff();
             if (menu[currentMenuOption].hasParentOption)
