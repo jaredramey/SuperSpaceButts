@@ -10,8 +10,6 @@ public class ScreenController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(Screen.currentResolution);
-        //if(Screen.currentResolution)
     }
 
     public void UpdateScreenResolution(int currentSelection)

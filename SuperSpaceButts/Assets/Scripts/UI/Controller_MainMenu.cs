@@ -207,12 +207,10 @@ public class Controller_MainMenu : MonoBehaviour
         
         else if(menu[currentMenuOption].currentMenuSelection.name == "3_Exit")
         {
-            //TODO: Add exit option
-            Debug.Log("Exit game");
+            QuitGame.Instance.Quit();
         }
         else if (menu[currentMenuOption].currentMenuSelection.name == "World_1-1")
         {
-            //TODO: Add level option
             LevelManager.Instance.LoadNextLevel("Playground");
         }
         else if (menu[currentMenuOption].currentMenuSelection.name == "World_1-2")

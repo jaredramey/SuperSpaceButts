@@ -1,15 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class QuitGame : MonoBehaviour {
+public class QuitGame : MonoBehaviour
+{
+    public static QuitGame instance;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public static QuitGame Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = (QuitGame)FindObjectOfType(typeof(QuitGame));
+                if (instance == null)
+                {
+                    instance = (new GameObject("LevelManager")).AddComponent<QuitGame>();
+                }
+            }
+            return instance;
+        }
+    }
+
+    public void Quit()
+    {
+        if (LevelManager.Instance.GetCurrentLevel() != "Menu_Main")
+        {
+            LevelManager.Instance.LoadNextLevel("Menu_Main");
+        }
+        else
+        {
+            Application.Quit();
+        }
+    }
 }

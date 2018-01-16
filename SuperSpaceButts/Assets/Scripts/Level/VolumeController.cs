@@ -22,6 +22,5 @@ public class VolumeController : MonoBehaviour
     public void UpdateVolume(float newVolume)
     {
         masterVolume = newVolume;
-        Debug.Log("Master volume now set to " + masterVolume);
     }
 }

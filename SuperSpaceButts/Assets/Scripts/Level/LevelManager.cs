@@ -7,10 +7,19 @@ using System.Collections;
 public class LevelManager : MonoBehaviour
 {
     private static LevelManager instance = null;
+    private string currentLevel = "";
 
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            QuitGame.Instance.Quit();
+        }
     }
 
     public static LevelManager Instance
@@ -31,6 +40,12 @@ public class LevelManager : MonoBehaviour
 
     public void LoadNextLevel(string levelToLoad)
     {
+        currentLevel = levelToLoad;
         SceneManager.LoadScene(levelToLoad, LoadSceneMode.Single);
+    }
+
+    public string GetCurrentLevel()
+    {
+        return currentLevel;
     }
 }
