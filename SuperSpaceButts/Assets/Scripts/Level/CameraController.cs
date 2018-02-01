@@ -47,18 +47,18 @@ public class CameraController : MonoBehaviour
 
         player = GameObject.Find("Player").gameObject.transform;
         //Later will go back to main menu but for now just exit the game
-        //TODO: Add a script deticated to debuging funtions
+        //TODO: Add a script dedicated to debugging functions
         if(!player)
         {
             Debug.Log("Player not found! Exiting application....");
-            //TODO: Exit Application
+            Application.Quit();
         }
 
         cameraBounds = GetComponent<BoxCollider2D>();
         if(!cameraBounds)
         {
             Debug.Log("Camera Bounds not found! Exiting application....");
-            //TODO: Exit Application
+            Application.Quit();
         }
 
         min = cameraBounds.bounds.min;
@@ -79,7 +79,7 @@ public class CameraController : MonoBehaviour
         #region Camera_Follow_Update
         if (isFollowing)
         {
-            //If camera is outside the margine specified then smooth it so it doesn't go outside of it
+            //If camera is outside the margin specified then smooth it so it doesn't go outside of it
             if(Mathf.Abs(x - player.position.x) > margin.x)
             {
                 x = Mathf.Lerp(x, player.position.x, smoothing.x * dt);
